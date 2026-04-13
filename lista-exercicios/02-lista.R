@@ -65,34 +65,66 @@ dados_marketing <- read_csv(
 # Exercicio 3 -------------------------------------------------------------
 
 # a)
+dados_marketing_limpos <- dados_marketing  |> 
+  clean_names()
 
 
-## b)
+## b)  
 
+#names(dados_marketing_limpos)
 
 
 # Exercicio 4 -------------------------------------------------------------
 
+dados_marketing_limpos |>
+  select (data,
+          mes,
+          gasto_tv,
+          gasto_radio,
+          promocao,
+          receita_vendas)
 
 
 # Exercicio 5 -------------------------------------------------------------
 
+dados_marketing_limpos <- dados_marketing_limpos |>
+  mutate(
+    gasto_total = gasto_tv + gasto_radio + gasto_redes_sociais + gasto_email
+  )
+
+dados_marketing_limpos |>
+  select(data, mes, gasto_total, receita_vendas)
+
+#View(dados_marketing_limpos)
 
 
 # Exercicio 6 -------------------------------------------------------------
 
-
+dados_marketing_limpos <- dados_marketing_limpos |>
+  mutate(
+    status_promocao = ifelse(promocao == 1, "Com promoção", "Sem promoção"),
+    status_concorrencia = ifelse(atividade_concorrente == 1, "Com concorrência", "Sem concorrência")
+  )
 
 
 # Exercicio 7 -------------------------------------------------------------
 
+# salva os dados limpos em um arquivo rds para análises
+# futuras sem precisar repetir a preparação dos dados
+
+## define o caminho relativo para salvar o arquivo rds
+caminho_rds <- here("dados/limpos/dados_marketing_limpos.rds")
+
+## salva o objeto dados_vendas_limpos no formato rds
+readr::write_rds(dados_marketing_limpos, caminho_rds)
 
 
 
 # Exercicio 8 -------------------------------------------------------------
 
-
-
-
+dados_marketing_limpos |>
+  filter(promocao == 1 & receita_vendas > 1000) |>
+  select(data, mes, receita_vendas, status_promocao)
 
 # Exercicio 9 -------------------------------------------------------------
+
