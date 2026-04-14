@@ -127,4 +127,18 @@ dados_marketing_limpos |>
   select(data, mes, receita_vendas, status_promocao)
 
 # Exercicio 9 -------------------------------------------------------------
+# Criar resumo mensal
 
+resumo_mensal <- dados_marketing_limpos |>
+  group_by(mes) |>
+  summarise(
+    receita_media = mean(receita_vendas, na.rm = TRUE),
+    receita_total = sum(receita_vendas, na.rm = TRUE),
+    gasto_total_medio = mean(gasto_total, na.rm = TRUE),
+    semanas_com_promocao = sum(promocao == 1, na.rm = TRUE)
+  ) |>
+  arrange(desc(receita_media))
+
+
+# Visualizar o resultado
+View(resumo_mensal)
